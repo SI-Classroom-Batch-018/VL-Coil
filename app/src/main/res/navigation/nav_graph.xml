@@ -8,4 +8,8 @@
         android:id="@+id/pokeFragment"
         android:name="com.syntax_institut.pokemontest.ui.PokeFragment"
         android:label="PokeFragment" />
+    <fragment
+        android:id="@+id/fragmentPokeDetail"
+        android:name="com.syntax_institut.pokemontest.ui.FragmentPokeDetail"
+        android:label="FragmentPokeDetail" />
 </navigation>

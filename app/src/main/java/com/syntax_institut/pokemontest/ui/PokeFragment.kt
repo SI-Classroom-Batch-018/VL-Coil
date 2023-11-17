@@ -26,8 +26,9 @@ class PokeFragment: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        // Observer um die Liste an allen Pokemon zu beobachten
         viewModel.pokemon.observe(viewLifecycleOwner) {
-            binding.rvPoke.adapter = PokeAdapter(it)
+            binding.rvPoke.adapter = PokeAdapter(it, viewModel)
         }
 
     }
