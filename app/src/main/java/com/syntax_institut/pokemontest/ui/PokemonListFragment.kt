@@ -7,30 +7,27 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import com.syntax_institut.pokemontest.adapter.PokeAdapter
-import com.syntax_institut.pokemontest.databinding.FragmentPokeBinding
+import com.syntax_institut.pokemontest.databinding.FragmentPokemonListBinding
 
-class PokeFragment: Fragment() {
+class PokemonListFragment: Fragment() {
 
-    private lateinit var binding: FragmentPokeBinding
-    private val viewModel: PokeViewModel by activityViewModels()
+    private lateinit var binding: FragmentPokemonListBinding
+    private val viewModel: PokemonViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentPokeBinding.inflate(layoutInflater)
+        binding = FragmentPokemonListBinding.inflate(layoutInflater)
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Observer um die Liste an allen Pokemon zu beobachten
         viewModel.pokemon.observe(viewLifecycleOwner) {
             binding.rvPoke.adapter = PokeAdapter(it, viewModel)
         }
-
     }
-
 }

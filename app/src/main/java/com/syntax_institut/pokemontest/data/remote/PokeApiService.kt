@@ -23,15 +23,11 @@ val retrofit: Retrofit = Retrofit.Builder()
 
 interface PokeApiService {
 
-    // Endpunkt um alle Pokemon abzufragen
     @GET("pokemon")
-    suspend fun getPokemon(@Query("limit") limit: Int, @Query("offset") offset: Int): PokeResult
+    suspend fun getPokemon(@Query("limit") limit: Int = 151): PokeResult
 
-    // Endpunkt um die Details eines einzelnen Pokemons zu laden
-    // Dafür übergeben wir die Pfad-Variable
-    @GET("pokemon/{id}")
-    suspend fun getPokemonDetail(@Path("id") id: Int): PokemonDetail
-
+    @GET("pokemon/{name}")
+    suspend fun getPokemonDetail(@Path("name") name: String): PokemonDetail
 }
 
 object PokeApi {

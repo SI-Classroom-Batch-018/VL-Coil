@@ -1,18 +1,29 @@
 package com.syntax_institut.pokemontest.ui
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import coil.load
+import coil.size.Precision
+import coil.size.Scale
+import coil.transform.CircleCropTransformation
+import coil.transform.RoundedCornersTransformation
+import coil.transform.Transformation
+import coil.transition.Transition
+import com.syntax_institut.pokemontest.R
 import com.syntax_institut.pokemontest.databinding.FragmentPokeDetailBinding
+import com.syntax_institut.pokemontest.getColor
+import kotlin.math.round
 
 class FragmentPokeDetail: Fragment() {
 
     private lateinit var binding: FragmentPokeDetailBinding
-    private val viewModel: PokeViewModel by activityViewModels()
+    private val viewModel: PokemonViewModel by activityViewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -26,32 +37,19 @@ class FragmentPokeDetail: Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // Die PokemonDetails werden beobachtet
-        viewModel.pokemonDetail.observe(viewLifecycleOwner) {
-            binding.tvPokeDetailName.text = it.name
-            binding.tvPokeHeigt.text = it.height.toString()
-            binding.tvPokeWeight.text = it.weight.toString()
-            binding.ivPokeDetailImage.load(it.sprites.image)
+        viewModel.detailPokemon.observe(viewLifecycleOwner) {
+            binding.tvNameDetail.text = it.name.capitalize()
+            binding.tvHeightDetail.text = it.height.toString()
+            binding.tvWeigtDetail.text = it.weight.toString()
+            val type = it.types.first().type.name.capitalize()
+            binding.tvTypeDetail.text = type
+            binding.ivDetail.load(it.sprites.image) {
+                crossfade(1500)
+                precision(Precision.EXACT)
+            }
+            binding.root.setBackgroundColor(getColor(type))
         }
 
-        // Die LiveData, ob die Api aktuell läft wird beobachtet
-        // Wenn die API lädt werden alle Views versteckt und die PrograssBar angezeigt
-        // Wenn die API nicht mehr lädt werden alle Views angezeigt und die ProgressBar versteckt
-        viewModel.isApiLoading.observe(viewLifecycleOwner) {
-            if (it) {
-                binding.tvPokeDetailName.visibility = View.INVISIBLE
-                binding.tvPokeHeigt.visibility = View.INVISIBLE
-                binding.tvPokeWeight.visibility = View.INVISIBLE
-                binding.ivPokeDetailImage.visibility = View.INVISIBLE
-                binding.pbLoading.visibility = View.VISIBLE
-            } else {
-                binding.tvPokeDetailName.visibility = View.VISIBLE
-                binding.tvPokeHeigt.visibility = View.VISIBLE
-                binding.tvPokeWeight.visibility = View.VISIBLE
-                binding.ivPokeDetailImage.visibility = View.VISIBLE
-                binding.pbLoading.visibility = View.GONE
-            }
-        }
 
     }
 

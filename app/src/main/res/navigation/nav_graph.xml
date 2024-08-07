@@ -2,14 +2,18 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/pokeFragment">
+    app:startDestination="@id/pokemonListFragment">
 
-    <fragment
-        android:id="@+id/pokeFragment"
-        android:name="com.syntax_institut.pokemontest.ui.PokeFragment"
-        android:label="PokeFragment" />
     <fragment
         android:id="@+id/fragmentPokeDetail"
         android:name="com.syntax_institut.pokemontest.ui.FragmentPokeDetail"
         android:label="FragmentPokeDetail" />
+    <fragment
+        android:id="@+id/pokemonListFragment"
+        android:name="com.syntax_institut.pokemontest.ui.PokemonListFragment"
+        android:label="PokemonListFragment" >
+        <action
+            android:id="@+id/action_pokemonListFragment_to_fragmentPokeDetail"
+            app:destination="@id/fragmentPokeDetail" />
+    </fragment>
 </navigation>

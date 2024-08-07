@@ -1,19 +1,21 @@
 package com.syntax_institut.pokemontest.adapter
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.syntax_institut.pokemontest.R
 import com.syntax_institut.pokemontest.data.model.Pokemon
 import com.syntax_institut.pokemontest.databinding.ItemPokeBinding
-import com.syntax_institut.pokemontest.ui.PokeViewModel
+import com.syntax_institut.pokemontest.getColor
+import com.syntax_institut.pokemontest.ui.PokemonViewModel
 
-// Adapter um die Pokemon in der RecyclerView anzuzeigen
 class PokeAdapter(
     private val dataset: List<Pokemon>,
-    private val viewModel: PokeViewModel
+    private val viewModel: PokemonViewModel
 ): RecyclerView.Adapter<PokeAdapter.PokeViewHolder>() {
 
     inner class PokeViewHolder(val binding: ItemPokeBinding): RecyclerView.ViewHolder(binding.root)
@@ -30,14 +32,24 @@ class PokeAdapter(
     override fun onBindViewHolder(holder: PokeViewHolder, position: Int) {
         val item = dataset[position]
 
-        holder.binding.tvPokeName.text = item.name
-        holder.binding.ivPokeImage.load(item.image)
+        viewModel.loadDetailPokemon(item.name).observe(holder.itemView.context as LifecycleOwner) {
+            holder.binding.tvName.text = it.name.capitalize()
+            val type = it.types.first().type.name.capitalize()
+            holder.binding.tvType.text = type
+            holder.binding.tvNumber.text = (position + 1).toString()
+            holder.binding.ivPokemon.load(it.sprites.image) {
+                placeholder(R.drawable.ic_launcher_background)
+            }
+            holder.binding.cvPokemon.setCardBackgroundColor(getColor(type))
 
-        // Beim Klick auf eine CardView wird zum DetailFragment navigiert
-        // Davor wird dem ViewModel die Id übergeben um die Daten des richtigen Pokemon zu laden
-        holder.binding.cvPoke.setOnClickListener {
-            viewModel.loadPokemonDetails(item.id)
-            holder.itemView.findNavController().navigate(R.id.fragmentPokeDetail)
+            holder.binding.cvPokemon.setOnClickListener { click ->
+                viewModel.setDetailViewPokemon(it)
+                holder.itemView
+                    .findNavController()
+                    .navigate(R.id.fragmentPokeDetail)
+            }
         }
+
+
     }
 }
